@@ -21,10 +21,6 @@ public class Hero {
         return new Position(position.getX()+1, position.getY());
     }
 
-    public void draw(Screen screen){
-        screen.setCharacter(position.getX(), position.getY(), TextCharacter.fromCharacter('X')[0]);
-    }
-
     public Position getPosition() {
         return position;
     }
