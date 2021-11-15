@@ -13,7 +13,7 @@ import java.util.List;
 public class Arena {
     private int width, height;
     private final Position position = new Position(10, 10);
-    private final Hero hero = new Hero(position);
+    private final Hero hero;
     private List<Wall> walls;
 
     public Hero getHero(){
@@ -25,6 +25,7 @@ public class Arena {
         this.height = height;
 
         this.walls = createWalls();
+        hero = new Hero(position.getX(), position.getY());
     }
 
     public int getHeight() {
