@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class Game {
     private static Screen screen;
-    private Arena arena = new Arena(40, 20);
+    private Arena arena;
     public Game() throws IOException {
         try {
             TerminalSize terminalSize = new TerminalSize(40, 20);
@@ -22,13 +22,15 @@ public class Game {
             screen.setCursorPosition(null); // we don't need a cursor
             screen.startScreen(); // screens must be started
             screen.doResizeIfNecessary();
+
+            arena = new Arena(40, 20);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     private void draw() throws IOException {
         screen.clear();
-        arena.draw(screen);
+        arena.draw(screen.newTextGraphics());
         screen.refresh();
     }
     public void run() throws IOException {
@@ -37,7 +39,7 @@ public class Game {
             KeyStroke key = screen.readInput();
             if(key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') screen.stopScreen();
             if(key.getKeyType()== KeyType.EOF) break;
-            arena.processKey(key);
+            processKey(key);
             screen.setCharacter(arena.getHero().getPosition().getX(), arena.getHero().getPosition().getY(), TextCharacter.fromCharacter('X')[0]);
         }
     }
