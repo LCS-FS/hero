@@ -1,7 +1,4 @@
-import com.googlecode.lanterna.TerminalPosition;
-import com.googlecode.lanterna.TerminalSize;
-import com.googlecode.lanterna.TextCharacter;
-import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.screen.Screen;
@@ -17,6 +14,8 @@ public class Arena {
     private final Hero hero;
     private List<Wall> walls;
     private List<Coin> coins;
+    private List<Monster> monsters;
+    public boolean finish = false;
 
     public Hero getHero(){
         return hero;
@@ -29,6 +28,7 @@ public class Arena {
         this.walls = createWalls();
         hero = new Hero(position.getX(), position.getY());
         this.coins = createCoins();
+        this.monsters = createMonsters();
 
     }
 
@@ -59,6 +59,10 @@ public class Arena {
 
         for(Coin coin : coins){
             coin.draw(graphics);
+        }
+        moveMonsters();
+        for(Monster monster : monsters){
+            monster.draw(graphics);
         }
     }
     public void processKey(KeyStroke key){
@@ -116,5 +120,39 @@ public class Arena {
                 break;
             }
         }
+    }
+    private void moveMonsters(){ //true if monster touches
+        Position hero_pos = hero.getPosition();
+        Position new_pos;
+        for (Monster monster : monsters){
+            Position mon_pos = monster.getPosition();
+
+            if(hero_pos.getX() == mon_pos.getX() && hero_pos.getY() == mon_pos.getY()-1) finish = true;
+            if(hero_pos.getX() == mon_pos.getX() && hero_pos.getY() == mon_pos.getY()+1) finish = true;
+            if(hero_pos.getX() == mon_pos.getX()-1 && hero_pos.getY() == mon_pos.getY()) finish = true;
+            if(hero_pos.getX() == mon_pos.getX()+1 && hero_pos.getY() == mon_pos.getY()) finish = true;
+
+            /* not working yet
+            while (true){ //stops the monsters from going over the walls
+                new_pos = monster.move();
+
+                if(new_pos.getX()-1 == 1);
+                else if(mon_pos.getX()+1 == width-1);
+                else if(mon_pos.getY()-1 == 1);
+                else if(mon_pos.getX()+1 == height-1);
+                break;
+            }*/
+            new_pos = monster.move();
+            monster.setPosition(new_pos);
+        }
+    }
+
+    private List<Monster> createMonsters(){
+        Random random = new Random();
+        ArrayList<Monster> monsters = new ArrayList<>();
+        for (int i = 0; i < 8; i++)
+            monsters.add(new Monster(random.nextInt(width - 2) +
+                    1, random.nextInt(height - 2) + 1));
+        return monsters;
     }
 }

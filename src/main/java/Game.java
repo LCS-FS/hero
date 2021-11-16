@@ -36,16 +36,22 @@ public class Game {
     public void run() throws IOException {
         while(true) {
             arena.retrieveCoins();
-            draw();
-            KeyStroke key = screen.readInput();
-            if(key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') screen.stopScreen();
-            if(key.getKeyType()== KeyType.EOF) break;
-            processKey(key);
-            screen.setCharacter(arena.getHero().getPosition().getX(), arena.getHero().getPosition().getY(), TextCharacter.fromCharacter('X')[0]);
+            if(arena.finish){
+                screen.stopScreen();
+                System.out.println("Game Over");
+                break;
+            }
+            else{
+                draw();
+                KeyStroke key = screen.readInput();
+                if(key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') screen.stopScreen();
+                if(key.getKeyType()== KeyType.EOF) break;
+                processKey(key);
+                screen.setCharacter(arena.getHero().getPosition().getX(), arena.getHero().getPosition().getY(), TextCharacter.fromCharacter('X')[0]);
+            }
         }
     }
     private void processKey(KeyStroke key){
         arena.processKey(key);
     }
-
 }
