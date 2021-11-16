@@ -8,7 +8,7 @@ public class Wall extends Element{
     }
 
     public void draw(TextGraphics graphics){
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#FFFFFF"));
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#000000"));
         graphics.putString(new TerminalPosition(position.getX(), position.getY()), " ");
     }
 

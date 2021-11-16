@@ -35,6 +35,7 @@ public class Game {
     }
     public void run() throws IOException {
         while(true) {
+            arena.retrieveCoins();
             draw();
             KeyStroke key = screen.readInput();
             if(key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') screen.stopScreen();
