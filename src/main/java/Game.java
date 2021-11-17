@@ -36,6 +36,8 @@ public class Game {
     public void run() throws IOException {
         while(true) {
             arena.retrieveCoins();
+            arena.verifyMonsterCollisions();
+            arena.moveMonsters();
             if(arena.finish){
                 screen.stopScreen();
                 System.out.println("Game Over");

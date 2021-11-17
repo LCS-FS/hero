@@ -60,10 +60,11 @@ public class Arena {
         for(Coin coin : coins){
             coin.draw(graphics);
         }
-        moveMonsters();
+
         for(Monster monster : monsters){
             monster.draw(graphics);
         }
+
     }
     public void processKey(KeyStroke key){
         String keyString = key.getKeyType().toString();
@@ -121,28 +122,20 @@ public class Arena {
             }
         }
     }
-    private void moveMonsters(){ //true if monster touches
+    public void moveMonsters(){ //true if monster touches
         Position hero_pos = hero.getPosition();
         Position new_pos;
         for (Monster monster : monsters){
-            Position mon_pos = monster.getPosition();
 
-            if(hero_pos.getX() == mon_pos.getX() && hero_pos.getY() == mon_pos.getY()-1) finish = true;
-            if(hero_pos.getX() == mon_pos.getX() && hero_pos.getY() == mon_pos.getY()+1) finish = true;
-            if(hero_pos.getX() == mon_pos.getX()-1 && hero_pos.getY() == mon_pos.getY()) finish = true;
-            if(hero_pos.getX() == mon_pos.getX()+1 && hero_pos.getY() == mon_pos.getY()) finish = true;
-
-            /* not working yet
-            while (true){ //stops the monsters from going over the walls
-                new_pos = monster.move();
-
-                if(new_pos.getX()-1 == 1);
-                else if(mon_pos.getX()+1 == width-1);
-                else if(mon_pos.getY()-1 == 1);
-                else if(mon_pos.getX()+1 == height-1);
-                break;
-            }*/
+            Position old_pos = monster.getPosition();
             new_pos = monster.move();
+
+            for (Wall wall : walls){
+                if (wall.getPosition().equals(new_pos)){ //will only happen max 1 time per monster
+                    new_pos = old_pos;
+                    break;
+                }
+            }
             monster.setPosition(new_pos);
         }
     }
@@ -154,5 +147,14 @@ public class Arena {
             monsters.add(new Monster(random.nextInt(width - 2) +
                     1, random.nextInt(height - 2) + 1));
         return monsters;
+    }
+
+    public void verifyMonsterCollisions(){
+        for (Monster monster: monsters){
+            if(monster.getPosition().equals(hero.moveDown())) finish = true;
+            if(monster.getPosition().equals(hero.moveUp())) finish = true;
+            if(monster.getPosition().equals(hero.moveLeft())) finish = true;
+            if(monster.getPosition().equals(hero.moveRight())) finish = true;
+        }
     }
 }
